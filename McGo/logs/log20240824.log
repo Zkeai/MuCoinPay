@@ -1,0 +1,1 @@
+[FATAL][mongodb.go:38]2024/08/24 16:18:21 [无法链接到MongoDB:  connection() error occurred during connection handshake: auth error: unable to authenticate using mechanism "SCRAM-SHA-256": (AuthenticationFailed) Authentication failed.]
