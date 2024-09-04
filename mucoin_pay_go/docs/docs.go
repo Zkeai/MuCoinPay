@@ -24,7 +24,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "地址",
+                        "description": "钱包地址",
                         "name": "wallet",
                         "in": "query",
                         "required": true
@@ -86,6 +86,43 @@ const docTemplate = `{
                         "description": "参数错误",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/public/query": {
+            "get": {
+                "tags": [
+                    "business"
+                ],
+                "summary": "商铺信息查询",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户id",
+                        "name": "userID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/conf.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/conf.ResponseError"
                         }
                     },
                     "500": {

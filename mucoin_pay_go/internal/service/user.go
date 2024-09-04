@@ -5,11 +5,13 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/common/logger"
 	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/common/middleware"
 	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/common/redis"
 	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/internal/repo/db"
+	redisv8 "github.com/go-redis/redis/v8"
 
 	"io"
 	"time"
@@ -48,6 +50,13 @@ func (s *Service) UserRegister(ctx context.Context, wallet string) (*UserRegiste
 	if err != nil {
 		return nil, err
 	}
+	//注册成功
+	//1.店铺添加信息 id作为关联键
+	userId := user.ID
+	_, err = s.repo.BusinessRegister(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
 
 	// 返回正常的注册结果，UserExists 为 false
 	return &UserRegisterResponse{
@@ -56,14 +65,16 @@ func (s *Service) UserRegister(ctx context.Context, wallet string) (*UserRegiste
 	}, nil
 }
 
-func (s *Service) UserLogin(ctx context.Context, wallet string) (*LoginResponse, error) {
+func (s *Service) UserLogin(ctx context.Context, wallet string, host string) (*LoginResponse, error) {
 
 	query, err := s.repo.UserQuery(ctx, wallet)
 	if err != nil || query == nil {
-		return &LoginResponse{
-			SessionID: "",
-			Token:     "用户不存在",
-		}, err
+		//没有注册
+		query1, err := s.UserRegister(ctx, wallet)
+		if err != nil {
+			return nil, err
+		}
+		query = query1.User
 	}
 	//生成sessionID
 	id, err := generateSessionID()
@@ -80,13 +91,17 @@ func (s *Service) UserLogin(ctx context.Context, wallet string) (*LoginResponse,
 	result, err := redis.GetClient().Get(ctx, wallet).Result()
 
 	var sessionData SessionData
-	err = json.Unmarshal([]byte(result), &sessionData)
-	if err != nil {
-		logger.Error("Failed to unmarshal JSON data: %v", err)
-		return nil, fmt.Errorf("failed to unmarshal")
+	if errors.Is(err, redisv8.Nil) {
+
+	} else {
+		err = json.Unmarshal([]byte(result), &sessionData)
+		if err != nil {
+			logger.Error("Failed to unmarshal JSON data: %v", err)
+			return nil, fmt.Errorf("failed to unmarshal")
+		}
+		_ = middleware.InvalidateToken(sessionData.Token)
 	}
 
-	_ = middleware.InvalidateToken(sessionData.Token)
 	//redis存数据
 	userData := SessionData{
 		Role:      int(query.Type),

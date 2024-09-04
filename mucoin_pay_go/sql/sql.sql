@@ -11,12 +11,47 @@
  Target Server Version : 80300 (8.3.0)
  File Encoding         : 65001
 
- Date: 02/09/2024 19:32:31
+ Date: 03/09/2024 10:03:40
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- ----------------------------
+-- Table structure for yu_business
+-- ----------------------------
+DROP TABLE IF EXISTS `yu_business`;
+CREATE TABLE `yu_business` (
+                               `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                               `user_id` int unsigned NOT NULL COMMENT '用户id',
+                               `shop_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '店铺名称',
+                               `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '浏览器标题',
+                               `notice` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '店铺公告',
+                               `service_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '网页客服链接',
+                               `subdomain` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '子域名',
+                               `topdomain` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '顶级域名',
+                               `master_display` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '主站显示：0=否，1=是',
+                               `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Table structure for yu_category
+-- ----------------------------
+DROP TABLE IF EXISTS `yu_category`;
+CREATE TABLE `yu_category` (
+                               `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                               `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品分类名称',
+                               `sort` smallint unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+                               `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               `owner` int unsigned NOT NULL DEFAULT '0' COMMENT '所属会员：0=系统，其他等于会员UID',
+                               `icon` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '分类图标',
+                               `status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '状态：0=停用，1=启用',
+                               `hide` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '隐藏：1=隐藏，0=不隐藏',
+                               `user_level_config` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci COMMENT '会员配置',
+                               PRIMARY KEY (`id`,`hide`),
+                               UNIQUE KEY `unique_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Table structure for yu_user
@@ -32,6 +67,6 @@ CREATE TABLE `yu_user` (
                            `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录ip',
                            PRIMARY KEY (`id`),
                            UNIQUE KEY `unique_wallet` (`wallet`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
 SET FOREIGN_KEY_CHECKS = 1;
