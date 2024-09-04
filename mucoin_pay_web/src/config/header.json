@@ -5,81 +5,12 @@
       "name": "head",
       "item": [
         {
-          "name": "脚本",
+          "name": "订单",
           "item": [
             {
-              "name": "测试网",
+              "name": "查询订单",
               "icon": "icon-ceshiwangluozi",
-              "item": [
-                {
-                  "name": "Newland",
-                  "icon": "icon-LOGO_3",
-                  "click": true,
-                  "path": "/dashboard/drop/newland",
-                  "item": []
-                }
-              ]
-            },
-            {
-              "name": "项目",
-              "icon": "icon-jiaoben",
-              "item": [
-                {
-                  "name": "Caduceus",
-                  "icon": "icon-cad-CJP74KbY",
-                  "click": true,
-                  "path": "/dashboard/drop/caduceus",
-                  "item": []
-                }
-              ]
-            }
-          ]
-        },
-
-        {
-          "name": "工具",
-          "item": [
-            {
-              "name": "钱包",
-              "icon": "icon-qianbao2",
-              "item": [
-                {
-                  "name": "批量创建钱包",
-                  "path": "/dashboard/wallet/create",
-                  "click": true,
-                  "item": []
-                },
-                {
-                  "name": "钱包归集",
-                  "path": "/dashboard/wallet/m21",
-                  "click": true,
-                  "item": []
-                }
-              ]
-            },
-            {
-              "name": "交易所",
-              "icon": "icon-jiaoyisuo",
-              "item": [
-                {
-                  "name": "Binance",
-                  "path": "/dashboard/withdrawal/binance",
-                  "click": true,
-                  "item": []
-                },
-                {
-                  "name": "Okx",
-                  "path": "/dashboard/withdrawal/okex",
-                  "click": true,
-                  "item": []
-                },
-                {
-                  "name": "Bitget",
-                  "path": "/dashboard/withdrawal/bitget",
-                  "click": true,
-                  "item": []
-                }
-              ]
+              "path": "/dashboard/drop/newland"
             }
           ]
         },

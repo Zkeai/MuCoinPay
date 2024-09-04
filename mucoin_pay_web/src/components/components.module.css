@@ -9,35 +9,40 @@
 }
 
 .title {
-  display: flex;
-  font-weight: bold;
-  align-items: center;
-  margin-left: 3rem;
-  transition: width 0.3s, background-color 0.3s, color 0.3s;
+  @apply flex font-bold items-center transition-all duration-300;
+}
+
+@media (min-width: 430px) {
+  .title {
+    @apply ml-4 w-20;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    @apply ml-10 w-64;
+  }
 }
 
 .title:hover {
-  color: white !important;
   cursor: pointer;
 }
 
 .title:hover .text {
-  display: none;
+  background: rgb(245 158 10);
+  color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1px;
 }
 
-.zhuye {
-  display: none;
+.title {
+  @apply text-teal-400 text-2xl;
 }
-.title:hover .zhuye {
-  background: rgb(245 158 10);
-  fill: white;
-  border-radius: 10px;
-  display: flex;
-  height: 29px;
-  width: 68px;
-}
-.text {
-  font-size: large;
+
+@media (max-width: 1023px) {
+  .title {
+    @apply hidden;
+  }
 }
 
 .social {
@@ -92,37 +97,4 @@
   background-color: white;
   fill: white;
   border-radius: 50%;
-}
-
-/* CexWithDrawal */
-.cex {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
-  line-height: 16px;
-  padding: 10px 10px;
-  border-radius: 4px;
-  border: 2px solid transparent;
-}
-.cex.active {
-  background-color: #e1f3ea;
-  border: 2px solid #69c598;
-}
-
-/* 不显示自定义多行文本框的纵向滚动条 */
-.lineNumbers {
-  overflow: hidden;
-  user-select: none;
-  white-space: pre;
-  pointer-events: none;
-}
-
-.lineNumbers::-webkit-scrollbar {
-  display: none;
-}
-
-.lineNumbers {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 }

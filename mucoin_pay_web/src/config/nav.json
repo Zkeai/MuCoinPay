@@ -4,45 +4,7 @@
     "text": "首页",
     "icon": "icon-shouye"
   },
-  {
-    "itemKey": "drop",
-    "text": "撸毛",
-    "icon": "icon-a-scskongtou",
-    "items": [
-      {
-        "itemKey": "drop/newland",
-        "text": "Newland",
-        "icon": "icon-LOGO_3"
-      },
-      {
-        "itemKey": "drop/caduceus",
-        "text": "Caduceus",
-        "icon": "icon-cad-CJP74KbY"
-      }
-    ]
-  },
-  {
-    "itemKey": "withdrawal",
-    "text": "交易所提币",
-    "icon": "icon-jiaoyisuo",
-    "items": [
-      {
-        "itemKey": "withdrawal/binance",
-        "text": "Binance 交易所提币",
-        "icon": "icon-Binance"
-      },
-      {
-        "itemKey": "withdrawal/okex",
-        "text": "okex 交易所提币",
-        "icon": "icon-okex"
-      },
-      {
-        "itemKey": "withdrawal/bitget",
-        "text": "bitget 交易所提币",
-        "icon": "icon-bitget"
-      }
-    ]
-  },
+
   {
     "itemKey": "wallet",
     "text": "链上钱包",

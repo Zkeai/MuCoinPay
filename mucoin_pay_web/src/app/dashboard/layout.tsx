@@ -7,7 +7,7 @@ import { BackTop } from '@douyinfe/semi-ui';
 
 import { Provider } from 'react-redux'
 import store from "@/redux/store"
-
+import Footer  from "@/components/layout/footer/Footer"
 type DashboardLayoutProps = {
     children: ReactNode;
   };
@@ -26,7 +26,9 @@ const Page = ({ children }: DashboardLayoutProps) => {
           </div>
         </div>
       </Provider>
+      <Footer> </Footer>
     </div>
+    
   );
 }
 

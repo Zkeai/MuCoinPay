@@ -6,7 +6,7 @@ class HttpService {
   constructor() {
     this.http = axios.create({
       withCredentials: true,
-      baseURL: '/api', // 你的 API 基础 URL
+      baseURL: 'http://localhost:2900/api/v1', // 你的 API 基础 URL
       timeout: 60000, // 请求超时时间
       headers: {
         'Content-Type': 'application/json',
@@ -16,9 +16,11 @@ class HttpService {
     // 请求拦截器
     this.http.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+        if (typeof window !== 'undefined') { // 检查是否在客户端环境
+          const token = localStorage.getItem('token');
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
         return config;
       },
@@ -30,7 +32,7 @@ class HttpService {
     // 响应拦截器
     this.http.interceptors.response.use(
       (response: AxiosResponse) => {
-        return response;
+        return response.data;
       },
       (error) => {
         return Promise.reject(error);
