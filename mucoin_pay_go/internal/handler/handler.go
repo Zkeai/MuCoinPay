@@ -70,4 +70,16 @@ func InitRouter(s *chttp.Server, service *service.Service) {
 		cgpro.POST("/add", categoryAdd)
 	}
 
+	comg := g.Group("/commodity")
+	comgpub := comg.Group("/public")
+	{
+		comgpub.GET("/query", commodityQuery)
+	}
+	comg.Use(middleware.Middleware())
+	comg.Use(middleware.CasbinMiddleware(e))
+	comgpro := comg.Group("/protected")
+	{
+		comgpro.POST("/add", createCommodity)
+	}
+
 }

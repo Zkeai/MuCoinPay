@@ -28,11 +28,11 @@ interface MenuItem {
 
 const renderSubMenu = (items: SubMenuItem[]) => {
   return (
-    <ul className="flex space-x-10 min-w-[200px]  w-auto py-8 px-8 sm:space-x-2 sm:min-w-[50px]">
-      <div className="flex space-x-10 min-w-[200px] w-auto justify-center">
+    <ul className=" flex  md:min-w-[200px]  space-x-10 w-auto py-8 px-8 ">
+      <div className="flex md:min-w-[200px] space-x-10  w-auto justify-center">
         {items.map((subItem, index) => (
-          <li key={index} className="mr-4 min-w-[100px]">
-            <div className="flex items-center space-x-2 text-black cursor-default pl-4 font-bold">
+          <li key={index} className="mr-4 md:min-w-[100px]">
+            <div className="flex items-center space-x-2 text-black cursor-default pl-4 font-bold ">
               {subItem.icon && (
                 <Icon type={subItem.icon} size={20} color="blue" />
               )}
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
           </span>
         </div>
       </div>
-      <div className="flex-grow ml-4 flex md:justify-center">
+      <div className="flex-grow ml-8 flex md:justify-center">
         <nav>
           <ul className="flex lg:space-x-8 ">
             {menu.map((menuItem, index) => (

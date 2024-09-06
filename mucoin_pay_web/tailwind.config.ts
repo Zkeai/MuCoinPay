@@ -18,6 +18,12 @@ const config: Config = {
         xl: '1280px',
         '2xl': '1536px',
     },
+    boxShadow: {
+      'custom-1': '0 6px 0 0 rgb(0 0 0 / 1%), 0 15px 32px 0 #eda9c324',
+    },
+    borderRadius: {
+      '20px': '20px',
+    },
 
     },
   },

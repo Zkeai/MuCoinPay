@@ -11,7 +11,7 @@
  Target Server Version : 80300 (8.3.0)
  File Encoding         : 65001
 
- Date: 03/09/2024 10:03:40
+ Date: 05/09/2024 09:01:49
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,7 @@ CREATE TABLE `yu_business` (
                                `master_display` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '主站显示：0=否，1=是',
                                `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Table structure for yu_category
@@ -51,6 +51,59 @@ CREATE TABLE `yu_category` (
                                `user_level_config` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci COMMENT '会员配置',
                                PRIMARY KEY (`id`,`hide`),
                                UNIQUE KEY `unique_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Table structure for yu_commodity
+-- ----------------------------
+DROP TABLE IF EXISTS `yu_commodity`;
+CREATE TABLE `yu_commodity` (
+                                `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                                `category_id` int unsigned NOT NULL COMMENT '商品分类ID',
+                                `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '商品名称',
+                                `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '商品说明',
+                                `cover` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '商品封面图片',
+                                `factory_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '成本单价',
+                                `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品单价(未登录)',
+                                `user_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品单价(会员价)',
+                                `status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '状态：0=下架，1=上架',
+                                `owner` int unsigned NOT NULL DEFAULT '0' COMMENT '所属会员：0=系统，其他等于会员UID',
+                                `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                `api_status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'API对接：0=关闭，1=启用',
+                                `code` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '商品代码(API对接)',
+                                `delivery_way` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '发货方式：0=自动发货，1=手动发货/插件发货',
+                                `delivery_auto_mode` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '自动发卡模式：0=旧卡先发，1=随机发卡，2=新卡先发',
+                                `delivery_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '手动发货显示信息',
+                                `contact_type` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '联系方式：0=任意，1=手机，2=邮箱，3=QQ',
+                                `password_status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '订单密码：0=关闭，1=启用',
+                                `sort` smallint unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+                                `coupon` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '优惠卷：0=关闭，1=启用',
+                                `shared_id` int unsigned DEFAULT NULL COMMENT '共享平台ID',
+                                `shared_code` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '共享平台-商品代码',
+                                `shared_premium` float(10,2) unsigned DEFAULT '0.00' COMMENT '商品加价',
+                                `shared_premium_type` tinyint unsigned DEFAULT '0' COMMENT '加价模式',
+                                `seckill_status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '商品秒杀：0=关闭，1=开启',
+                                `seckill_start_time` datetime DEFAULT NULL COMMENT '秒杀开始时间',
+                                `seckill_end_time` datetime DEFAULT NULL COMMENT '秒杀结束时间',
+                                `draft_status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '指定卡密购买：0=关闭，1=启用',
+                                `draft_premium` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '指定卡密购买时溢价',
+                                `inventory_hidden` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '隐藏库存：0=否，1=是',
+                                `leave_message` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '发货留言',
+                                `recommend` tinyint unsigned DEFAULT '0' COMMENT '推荐商品：0=否，1=是',
+                                `send_email` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '发送邮件：0=否，1=是',
+                                `only_user` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '限制登录购买：0=否，1=是',
+                                `purchase_count` int unsigned NOT NULL DEFAULT '0' COMMENT '限制购买数量：0=无限制',
+                                `widget` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '控件',
+                                `level_price` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci COMMENT '会员等级-定制价格',
+                                `level_disable` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '禁用会员等级折扣，0=关闭，1=启用',
+                                `minimum` int unsigned NOT NULL DEFAULT '0' COMMENT '最低购买数量，0=无限制',
+                                `maximum` int unsigned NOT NULL DEFAULT '0' COMMENT '最大购买数量，0=无限制',
+                                `shared_sync` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '同步平台价格：0=关，1=开',
+                                `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '配置文件',
+                                `hide` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '隐藏：1=隐藏，0=不隐藏',
+                                `inventory_sync` tinyint NOT NULL DEFAULT '0' COMMENT '同步库存数量: 0=关，1=开',
+                                PRIMARY KEY (`id`),
+                                UNIQUE KEY `unique_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -67,6 +120,6 @@ CREATE TABLE `yu_user` (
                            `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录ip',
                            PRIMARY KEY (`id`),
                            UNIQUE KEY `unique_wallet` (`wallet`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -12,4 +12,5 @@ export const config = getDefaultConfig({
     mainnet,
   ],
   ssr: true,
+  autoConnect: false, // 禁用自动连接
 });
