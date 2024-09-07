@@ -4,14 +4,16 @@ import { Button } from "@douyinfe/semi-ui";
 import { IconChevronDown } from "@douyinfe/semi-icons";
 import DOMPurify from "dompurify";
 import { getCategory } from "@/http/api/category/api";
+import { getCommodity } from "@/http/api/commodity/api";
 import Icon from "@/components/custom/Icon";
 
 export default function Home() {
   const [business, setBusiness] = useState<any>(null);
   const [category, setCategory] = useState<any>([]);
   const [checkedState, setCheckedState] = useState<number | null>(null);
+  const [commodityData, setCommodityData] = useState<any>(null); // 用于存储商品数据
 
-  //DOMPurify 防止 XSS 攻击
+  // DOMPurify 防止 XSS 攻击
   const cleanHTML = business ? DOMPurify.sanitize(business.notice) : "";
 
   useEffect(() => {
@@ -35,35 +37,49 @@ export default function Home() {
     }
   }, []);
 
-  const handleButtonClick = (id) => {
+  const handleButtonClick = async (id) => {
     setCheckedState((prevState) => (prevState === id ? null : id));
+    try {
+      const response = await getCommodity(id);
+      if (response && response.data) {
+        setCommodityData(response.data); // 设置商品数据
+      } else {
+        setCommodityData(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch commodity :", error);
+      setCommodityData(null); // 清空商品数据
+    }
   };
 
+  const handleComodityButtonClick = () => {};
+
   return (
-    <main className="h-[93vh] w-full mt-16 p-4 flex flex-col bg-[url('/image/bg.jpg')] bg-cover bg-center">
-      <div className="flex">
-        <div className="md:w-1/12 ios:w-[1/13]"></div>
-        <div className="flex w-screen flex-col space-y-8">
-          <div className="md:flex-1 rounded-2xl shadow-custom-1 bg-white opacity-85 min-h-[10vh]">
+    <main className="w-full h-screen mt-16 p-4 flex flex-col bg-[url('/image/bg.jpg')] bg-cover bg-center">
+      <div className="flex justify-center">
+        <div className="flex w-full max-w-screen-lg flex-col space-y-8">
+          {/* 公告部分 */}
+          <div className="rounded-2xl shadow-custom-1 bg-white opacity-85">
             <div className="flex leading-8">
               <Icon className="ml-5" type="icon-tongzhigonggao" size={34} />
               <span className="font-bold text-slate-700">公告</span>
             </div>
             <div
-              className="md:pt-2 mt-2 border-t text-amber-500 ml-5 font-bold border-dashed"
+              className="pt-2 mt-2 border-t text-amber-500 ml-5 font-bold border-dashed"
               dangerouslySetInnerHTML={{ __html: cleanHTML }}
             ></div>
           </div>
 
-          <div className="md:flex-1 rounded-2xl shadow-custom-1 bg-white opacity-85 ios:min-h-[10vh] md:min-h-[18vh]">
+          {/* 购买部分 */}
+          <div className="rounded-2xl shadow-custom-1 bg-white opacity-85">
             <div className="flex leading-8">
               <Icon className="ml-5" type="icon-goumai" size={28} />
               <span className="font-bold ml-1 text-slate-700">购买</span>
             </div>
-            <div className="md:pt-2 border-t ml-5  font-medium border-dashed ">
+            <div className="pt-2 border-t ml-5 font-medium border-dashed">
               <div className="text-slate-700 mt-3 mb-3">请选择商品分类</div>
-              <div className="flex space-x-5  my-3 md:my-1">
-                {category.length > 0 ? (
+              <div className="flex space-x-5 my-3">
+                {category?.length > 0 ? (
                   category.map((cat) => (
                     <div key={cat.id}>
                       <Button
@@ -78,7 +94,7 @@ export default function Home() {
                             checkedState === cat.id
                               ? "1px dashed #3effb8"
                               : "none",
-                          transition: "transform 0.2s, box-shadow 0.2s", // 过渡效果
+                          transition: "transform 0.2s, box-shadow 0.2s",
                           boxShadow:
                             checkedState === cat.id
                               ? "0 4px 8px rgba(0, 0, 0, 0.2)"
@@ -91,14 +107,48 @@ export default function Home() {
                     </div>
                   ))
                 ) : (
-                  <div></div>
+                  <div>未发现商品分类</div>
                 )}
               </div>
+
+              {/* 根据 commodityData 显示内容 */}
+              {commodityData && (
+                <div className="mt-5 mb-4">
+                  {commodityData?.length > 0 ? (
+                    commodityData.map((commodity) => (
+                      <div key={commodity.id}>
+                        <Button
+                          type="warning"
+                          className="checkable-button"
+                          icon={<IconChevronDown />}
+                          iconPosition="right"
+                          style={{
+                            borderRadius: "10px",
+                            cursor: "pointer",
+                            border:
+                              checkedState === commodity.id
+                                ? "1px dashed #3effb8"
+                                : "none",
+                            transition: "transform 0.2s, box-shadow 0.2s",
+                            boxShadow:
+                              checkedState === commodity.id
+                                ? "0 4px 8px rgba(0, 0, 0, 0.2)"
+                                : "0 2px 4px rgba(0, 0, 0, 0.1)",
+                          }}
+                          onClick={() => handleComodityButtonClick(commodity)}
+                        >
+                          {commodity.name}
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <div>未发现商品分类</div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        <div className="md:w-1/12 ios:w-[1/13]"></div>
       </div>
     </main>
   );
