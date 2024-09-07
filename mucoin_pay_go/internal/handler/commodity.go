@@ -50,7 +50,7 @@ func commodityQuery(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, conf.Response{Code: 500, Msg: "err", Data: err.Error()})
 		return
 	}
-	query, err := svc.GetCommodity(c.Request.Context(), r.ID)
+	query, err := svc.GetCommodity(c.Request.Context(), r.CategoryID)
 	if err != nil {
 		logger.Error(err)
 		c.JSON(http.StatusInternalServerError, conf.Response{Code: 500, Msg: "err", Data: err.Error()})

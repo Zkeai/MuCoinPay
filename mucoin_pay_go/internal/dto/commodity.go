@@ -1,5 +1,5 @@
 package dto
 
 type CommodityQueryReq struct {
-	ID int64 `form:"id"`
+	CategoryID int64 `form:"categoryID"`
 }

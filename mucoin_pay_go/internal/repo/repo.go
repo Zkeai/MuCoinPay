@@ -51,7 +51,7 @@ func (r *Repo) CreateCommodity(ctx context.Context, commodity *db.YuCommodity) (
 	return r.db.CreateCommodity(ctx, commodity)
 }
 
-func (r *Repo) GetCommodityByID(ctx context.Context, id int64) (*db.YuCommodity, error) {
+func (r *Repo) GetCommodityByID(ctx context.Context, id int64) ([]db.YuCommodity, error) {
 
 	return r.db.GetCommodityByID(ctx, id)
 }

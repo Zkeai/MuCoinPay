@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/internal/repo/db"
 	"github.com/google/uuid"
 	"strings"
@@ -84,12 +85,16 @@ func (s *Service) CreateCommodity(ctx context.Context, commodity *db.YuCommodity
 	return category, nil
 }
 
-func (s *Service) GetCommodity(ctx context.Context, id int64) (*db.YuCommodity, error) {
+func (s *Service) GetCommodity(ctx context.Context, id int64) ([]db.YuCommodity, error) {
 
-	commodity, err := s.repo.GetCommodityByID(ctx, id)
+	commoditys, err := s.repo.GetCommodityByID(ctx, id)
 	if err != nil {
+		println(err.Error())
+		if err.Error() == `sql: no rows in result set` {
+			return nil, errors.New("当前分类没有任何商品")
+		}
 		return nil, err
 	}
 
-	return commodity, nil
+	return commoditys, nil
 }

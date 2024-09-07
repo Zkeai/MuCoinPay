@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"database/sql"
+	"github.com/Zkeai/MuCoinPay/mucoin_pay_go/common/logger"
 	"time"
 )
 
@@ -56,7 +58,7 @@ const (
 	insertCommoditySQL = `INSERT INTO yu_commodity 
 		(category_id, name, description, cover, factory_price, price, user_price, status, owner, api_status, code, delivery_way, delivery_auto_mode, delivery_message, contact_type, password_status, sort, coupon, shared_id, shared_code, shared_premium, shared_premium_type, seckill_status, seckill_start_time, seckill_end_time, draft_status, draft_premium, inventory_hidden, leave_message, recommend, send_email, only_user, purchase_count, widget, level_price, level_disable, minimum, maximum, shared_sync, config, hide, inventory_sync) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	queryCommoditySQL = `SELECT * FROM yu_commodity WHERE id = ?`
+	queryCommoditySQL = `SELECT * FROM yu_commodity WHERE category_id = ?`
 	updateCommodity   = `UPDATE yu_commodity SET category_id=?, name=?, description=?, cover=?, factory_price=?, price=?, user_price=?, status=?, owner=?, api_status=?, code=?, delivery_way=?, delivery_auto_mode=?, delivery_message=?, contact_type=?, password_status=?, sort=?, coupon=?, shared_id=?, shared_code=?, shared_premium=?, shared_premium_type=?, seckill_status=?, seckill_start_time=?, seckill_end_time=?, draft_status=?, draft_premium=?, inventory_hidden=?, leave_message=?, recommend=?, send_email=?, only_user=?, purchase_count=?, widget=?, level_price=?, level_disable=?, minimum=?, maximum=?, shared_sync=?, config=?, hide=?, inventory_sync=? WHERE id=?`
 	deleteCommodity   = `DELETE FROM yu_commodity WHERE id = ?`
 )
@@ -72,17 +74,34 @@ func (db *DB) CreateCommodity(ctx context.Context, commodity *YuCommodity) (stri
 	return "success", nil
 }
 
-func (db *DB) GetCommodityByID(ctx context.Context, id int64) (*YuCommodity, error) {
-	row := db.db.QueryRow(ctx, queryCommoditySQL, id)
-
-	var commodity YuCommodity
-	err := row.Scan(&commodity.ID, &commodity.CategoryId, &commodity.Name, &commodity.Description, &commodity.Cover, &commodity.FactoryPrice, &commodity.Price, &commodity.UserPrice, &commodity.Status, &commodity.Owner, &commodity.CreateTime, &commodity.ApiStatus, &commodity.Code, &commodity.DeliveryWay, &commodity.DeliveryAutoMode, &commodity.DeliveryMessage, &commodity.ContactType, &commodity.PasswordStatus, &commodity.Sort, &commodity.Coupon, &commodity.SharedId, &commodity.SharedCode, &commodity.SharedPremium, &commodity.SharedPremiumType, &commodity.SeckillStatus, &commodity.SeckillStartTime, &commodity.SeckillEndTime, &commodity.DraftStatus, &commodity.DraftPremium, &commodity.InventoryHidden, &commodity.LeaveMessage, &commodity.Recommend, &commodity.SendEmail, &commodity.OnlyUser, &commodity.PurchaseCount, &commodity.Widget, &commodity.LevelPrice, &commodity.LevelDisable, &commodity.Minimum, &commodity.Maximum, &commodity.SharedSync, &commodity.Config, &commodity.Hide, &commodity.InventorySync)
-
+func (db *DB) GetCommodityByID(ctx context.Context, id int64) ([]YuCommodity, error) {
+	rows, err := db.db.Query(ctx, queryCommoditySQL, id)
 	if err != nil {
 		return nil, err
 	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			logger.Error(err)
+		}
+	}(rows)
 
-	return &commodity, nil
+	var commoditys []YuCommodity
+
+	for rows.Next() {
+		var commodity YuCommodity
+		if err := rows.Scan(&commodity.ID, &commodity.CategoryId, &commodity.Name, &commodity.Description, &commodity.Cover, &commodity.FactoryPrice, &commodity.Price, &commodity.UserPrice, &commodity.Status, &commodity.Owner, &commodity.CreateTime, &commodity.ApiStatus, &commodity.Code, &commodity.DeliveryWay, &commodity.DeliveryAutoMode, &commodity.DeliveryMessage, &commodity.ContactType, &commodity.PasswordStatus, &commodity.Sort, &commodity.Coupon, &commodity.SharedId, &commodity.SharedCode, &commodity.SharedPremium, &commodity.SharedPremiumType, &commodity.SeckillStatus, &commodity.SeckillStartTime, &commodity.SeckillEndTime, &commodity.DraftStatus, &commodity.DraftPremium, &commodity.InventoryHidden, &commodity.LeaveMessage, &commodity.Recommend, &commodity.SendEmail, &commodity.OnlyUser, &commodity.PurchaseCount, &commodity.Widget, &commodity.LevelPrice, &commodity.LevelDisable, &commodity.Minimum, &commodity.Maximum, &commodity.SharedSync, &commodity.Config, &commodity.Hide, &commodity.InventorySync); err != nil {
+			return nil, err
+		}
+
+		commoditys = append(commoditys, commodity)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return commoditys, nil
 }
 
 func (db *DB) UpdateCommodity(ctx context.Context, commodity YuCommodity) (string, error) {
