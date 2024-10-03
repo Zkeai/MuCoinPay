@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/internal/repo/db/business.go" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/internal/repo/db/category.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/internal/repo/db/commodity.go" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/internal/repo/db/pay.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/internal/repo/db/user.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/sql/sql.sql" dialect="MySQL" />
   </component>

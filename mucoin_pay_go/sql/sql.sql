@@ -11,7 +11,7 @@
  Target Server Version : 80300 (8.3.0)
  File Encoding         : 65001
 
- Date: 05/09/2024 09:01:49
+ Date: 10/09/2024 13:58:37
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,14 @@ CREATE TABLE `yu_business` (
                                `master_display` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '主站显示：0=否，1=是',
                                `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of yu_business
+-- ----------------------------
+BEGIN;
+INSERT INTO `yu_business` (`id`, `user_id`, `shop_name`, `title`, `notice`, `service_url`, `subdomain`, `topdomain`, `master_display`, `create_time`) VALUES (2, 1001, '木鱼店铺', '木鱼店铺', '本程序为开源程序，使用者造成的一切法律后果与作者无关。', NULL, NULL, 'localhost:2900', 0, '2024-09-05 11:13:24');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yu_category
@@ -51,7 +58,15 @@ CREATE TABLE `yu_category` (
                                `user_level_config` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci COMMENT '会员配置',
                                PRIMARY KEY (`id`,`hide`),
                                UNIQUE KEY `unique_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of yu_category
+-- ----------------------------
+BEGIN;
+INSERT INTO `yu_category` (`id`, `name`, `sort`, `create_time`, `owner`, `icon`, `status`, `hide`, `user_level_config`) VALUES (3, 'DEMO', 0, '2024-09-05 11:14:46', 1001, 'icon-shangpinguanli', 0, 0, NULL);
+INSERT INTO `yu_category` (`id`, `name`, `sort`, `create_time`, `owner`, `icon`, `status`, `hide`, `user_level_config`) VALUES (4, 'DEMO1', 0, '2024-09-05 11:14:51', 1001, 'icon-shangpinguanli', 0, 0, NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yu_commodity
@@ -102,9 +117,42 @@ CREATE TABLE `yu_commodity` (
                                 `config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '配置文件',
                                 `hide` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '隐藏：1=隐藏，0=不隐藏',
                                 `inventory_sync` tinyint NOT NULL DEFAULT '0' COMMENT '同步库存数量: 0=关，1=开',
-                                PRIMARY KEY (`id`),
+                                PRIMARY KEY (`id`,`name`) USING BTREE,
                                 UNIQUE KEY `unique_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of yu_commodity
+-- ----------------------------
+BEGIN;
+INSERT INTO `yu_commodity` (`id`, `category_id`, `name`, `description`, `cover`, `factory_price`, `price`, `user_price`, `status`, `owner`, `create_time`, `api_status`, `code`, `delivery_way`, `delivery_auto_mode`, `delivery_message`, `contact_type`, `password_status`, `sort`, `coupon`, `shared_id`, `shared_code`, `shared_premium`, `shared_premium_type`, `seckill_status`, `seckill_start_time`, `seckill_end_time`, `draft_status`, `draft_premium`, `inventory_hidden`, `leave_message`, `recommend`, `send_email`, `only_user`, `purchase_count`, `widget`, `level_price`, `level_disable`, `minimum`, `maximum`, `shared_sync`, `config`, `hide`, `inventory_sync`) VALUES (1, 3, '商品名称', '商品描述', '商品封面链接', 0.00, 0.00, 1.00, 0, 0, '2024-09-06 23:06:13', 0, 'bb6ac94671284d09b33586f52d02d5c5', 0, 0, '', 0, 0, 0, 0, 0, NULL, 0.00, 0, 0, NULL, NULL, 0, NULL, 0, NULL, 0, 0, 0, 0, NULL, NULL, 0, 0, 0, 0, NULL, 0, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for yu_pay
+-- ----------------------------
+DROP TABLE IF EXISTS `yu_pay`;
+CREATE TABLE `yu_pay` (
+                          `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+                          `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+                          `code` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '支付代码',
+                          `commodity` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '前台状态',
+                          `recharge` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '充值状态',
+                          `handle` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '支付平台',
+                          `sort` smallint unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+                          `equipment` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '设备：0=通用 1=手机 2=电脑',
+                          `cost` decimal(10,3) unsigned DEFAULT '0.000' COMMENT '手续费',
+                          `cost_type` tinyint DEFAULT NULL COMMENT '手续费模式：0=单笔固定，1=百分比',
+                          `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                          PRIMARY KEY (`id`),
+                          UNIQUE KEY `unique_code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of yu_pay
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for yu_user
@@ -120,6 +168,13 @@ CREATE TABLE `yu_user` (
                            `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '登录ip',
                            PRIMARY KEY (`id`),
                            UNIQUE KEY `unique_wallet` (`wallet`)
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
+
+-- ----------------------------
+-- Records of yu_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `yu_user` (`id`, `wallet`, `status`, `type`, `create_time`, `login_time`, `login_ip`) VALUES (1002, '0xf5f77d4e368f6ee1115515db3a537bbf98888888', 1, 0, '2024-09-05 11:13:24', NULL, NULL);
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -88,7 +88,7 @@ const Header: React.FC = () => {
   }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
-    <div className="fixed top-0 left-0 right-0 flex items-center shadow-md font-bold h-16 p-4 z-100 backdrop-blur">
+    <div className="fixed top-0 left-0 right-0 flex items-center shadow-md font-bold h-16 p-4 z-[9999] backdrop-blur">
       <div className="flex flex-none  lg:space-x-10  justify-center text-center">
         <Icon
           className={Style.headLeftIcon}

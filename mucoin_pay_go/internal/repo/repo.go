@@ -65,3 +65,23 @@ func (r *Repo) DeleteCommodity(ctx context.Context, id int64) (string, error) {
 
 	return r.db.DeleteCommodity(ctx, id)
 }
+
+func (r *Repo) CreatePay(ctx context.Context, pay *db.YuPay) (string, error) {
+
+	return r.db.InsertPay(ctx, pay)
+}
+
+func (r *Repo) GetPay(ctx context.Context, id int) ([]db.YuPay, error) {
+
+	return r.db.GetYuPayByID(ctx, id)
+}
+
+func (r *Repo) UpdatePay(ctx context.Context, pay *db.YuPay) error {
+
+	return r.db.UpdateYuPay(ctx, pay)
+}
+
+func (r *Repo) DeletePay(ctx context.Context, id int) error {
+
+	return r.db.DeleteYuPay(ctx, id)
+}
